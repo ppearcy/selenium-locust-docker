@@ -14,12 +14,12 @@
 
 
 # Start with a base Python 3.7 alpine image
-FROM python:3.7-alpine
+FROM python:3.8.0-alpine3.10
 
 COPY requirements.txt requirements.txt
 RUN apk --no-cache add --virtual=.build-dep \
       build-base \
-    && apk --no-cache add bash libzmq \
+    && apk --no-cache add bash libzmq linux-headers zeromq-dev chromium chromium-chromedriver \
     && pip install -r requirements.txt \
     && apk del .build-dep
 
