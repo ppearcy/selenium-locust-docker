@@ -1,3 +1,40 @@
+# selenium-locust
+  
+Based off of:
+* https://github.com/greenbird/locust
+* https://github.com/joyzoursky/docker-python-chromedriver
+
+Installs tools to allow this to run against the locust helm chart to perform UI based testing.
+
+A few gotchas:
+* Headless chrome has bugs in realbrowserlocusts. Apply fixes here: https://github.com/nickboucart/realbrowserlocusts/issues/4
+* Make sure to set resource allocations in helm chart, eg:
+
+```
+locust:
+  image:
+    repository: ppearcy/selenium-locust-docker
+    tag: latest
+  master:
+    config:
+      target-host: N/A
+  worker:
+    replicaCount: 1
+    # Resource requests are very important for running selenium/chrome in kubernetes
+    # Need to tune these to guarantee stability but not using too many resources
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 1024Mi
+      limits:
+        cpu: 4000m
+        memory: 4096Mi
+    config:
+      configmapName: locust-config-map
+```
+
+# PREVIOUS README VERBATIM
+
 ## Locust for Kubernetes
 
 This reporitory is forked from the tutorial from Google on how to conduct distributed load testing using [Kubernetes](http://kubernetes.io).
